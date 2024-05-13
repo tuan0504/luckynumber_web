@@ -1,0 +1,80 @@
+/* Dialog */
+.modal {
+  display: none;
+  align-items: center;
+  z-index: 99;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Modal content */
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 60%;
+  max-width: 500px; /* Limit maximum width */
+}
+
+/* Number table */
+.picknumber {
+  width: 100%;
+  border-collapse: collapse;
+  margin: auto;
+  padding: 20px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+}
+
+.picknumber td {
+  width: 20%;
+  height: 20%;
+  border: 10px solid black;
+  text-align: center;
+  font-size: 18px;
+  border-radius: 500px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
+}
+
+.picknumber td.selected {
+  background-color: yellow; /* Highlighted cell color */
+}
+
+/* Close button */
+.close {
+  float: right;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #aaa;
+  color: black;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.close:hover,
+.close:focus {
+  color: #808080;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Submit button */
+#submit655 {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+#submit655:hover {
+  background-color: #0056b3;
+}
