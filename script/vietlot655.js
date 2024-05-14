@@ -116,38 +116,39 @@ function displayResult(data) {
     console.log(data);
 
     var length = selectedNumbers.length;
-    var session = data.session;
+    var totalProbability = 28989675;
+
+
     var first = data.prize1;
     var second = data.prize2;
     var third = data.prize3;
     var jack2 = data.jack2;
     var jack1 = data.jack1;
 
-    var totalProbability = 28989675;
-
     if(first == undefined) {
-        first = Math.round(totalProbability/(combinations(length, 5)*combinations(55-length, 1)));
+        first = (combinations(length, 5)*combinations(55-length, 1))/totalProbability;
     } 
     if(second == undefined) {
-        second = Math.round(totalProbability/(combinations(length, 4)*combinations(55-length, 2)));
+        second = (combinations(length, 4)*combinations(55-length, 2))/totalProbability;
     } 
     if(third == undefined) {
-        third = Math.round(totalProbability/(combinations(length, 3)*combinations(55-length, 3)));
+        third = (combinations(length, 3)*combinations(55-length, 3))/totalProbability;
     } 
     if(jack2 == undefined) {
-        jack2 = Math.round(totalProbability/combinations(length, 5));
+        jack2 = combinations(length, 5)/totalProbability;
     } 
     if(jack1 == undefined) {
-        jack1 = Math.round(totalProbability/combinations(length, 6));        
+        jack1 = combinations(length, 6)/totalProbability;        
     }
 
-    var per1 = (1/first)*100;
-    var per2 = (1/second)*100;
-    var per3 = (1/third)*100;
-    var j2 = (1/jack2)*100;
-    var j1 = (1/jack1)*100;
+    var session = data.session;
+    
+    var per1 = first*100;
+    var per2 = second*100;
+    var per3 = third*100;
+    var j2 = jack2*100;
+    var j1 = jack1*100;
     var total = per1 + per2 + per3 + j2 + j1
-
 
     var txtSession = document.getElementById("vietlot_655_sesion");
     var txt1st = document.getElementById("vietlot_655_1st");
@@ -157,11 +158,11 @@ function displayResult(data) {
     var txtjack1 = document.getElementById("vietlot_655_jack1");
 
     txtSession.innerHTML = `Ở kỳ quay: <b>${session}</b> khả năng trúng giải của bạn là : <b>${total.toFixed(5)}</b>%.`;
-    txt3rd.innerHTML = `Khả năng trúng giải ba là  1/${third} ~ <b>${per3}%</b>`;
-    txt2nd.innerHTML = `Khả năng trúng giải nhì là  1/${second} ~ <b>${per2}%</b>`;
-    txt1st.innerHTML = `Khả năng trúng giải nhất là  1/${first} ~ <b>${per1}%</b>`;
-    txtjack2.innerHTML = `Khả năng trúng jackpot2 là  1/${jack2} ~ <b>${j2.toFixed(7)}%</b>`;
-    txtjack1.innerHTML = `Khả năng trúng jackpot1 là  1/${jack1} ~ <b>${j1.toFixed(7)}%</b>`;
+    txt3rd.innerHTML = `Khả năng trúng giải ba là ~ <b>${per3.toFixed(5)}%</b>`;
+    txt2nd.innerHTML = `Khả năng trúng giải nhì là ~ <b>${per2.toFixed(5)}%</b>`;
+    txt1st.innerHTML = `Khả năng trúng giải nhất là ~ <b>${per1.toFixed(5)}%</b>`;
+    txtjack2.innerHTML = `Khả năng trúng jackpot2 là ~ <b>${j2.toFixed(7)}%</b>`;
+    txtjack1.innerHTML = `Khả năng trúng jackpot1 là ~ <b>${j1.toFixed(7)}%</b>`;
 
     getSuggest655(total, length);
 }
@@ -172,9 +173,9 @@ function getSuggest655(total, length) {
     var suggest = document.getElementById("vietlot_655_suggest");
     var times = total/defaultProbability;
 
-    if(times < 2) {
+    if(times < 3) {
         suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Thấp</b>, kiến nghị không dùng.`
-    } else if (times > 8) {
+    } else if (times > 7) {
         suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Cao</b>, nên cân nhắc.`
     } else {
         suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Trung Bình</b>, có thể cân nhắc.`
@@ -183,7 +184,9 @@ function getSuggest655(total, length) {
 
 function combinations(n, r) 
 {
-  if (n == r || r == 0) {
+  if( n < r || r < 0 ) {
+      return 0;
+  } else if (n == r || r == 0) {
     return 1;
   } else  {
     return combinations(n,r-1)*((n-r+1)/r);
