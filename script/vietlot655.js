@@ -120,14 +120,18 @@ function displayResult(data) {
     console.log(data);
 
     const length = countwords(txtInput.value);
-    var totalProbability = 28989675;
+    const totalProbability = 28989675;
 
     var first = data.prize1;
     var second = data.prize2;
     var third = data.prize3;
     var jack2 = data.jack2;
     var jack1 = data.jack1;
+    var level = data.levelresult;
 
+    if (level == undefined) {
+        level = 1;
+    }
     if(first == undefined) {
         first = (combinations(length, 5)*combinations(55-length, 1))/totalProbability;
     } 
@@ -167,21 +171,18 @@ function displayResult(data) {
     txtjack2.innerHTML = `Khả năng trúng jackpot2 là ~ <b>${j2.toFixed(7)}%</b>`;
     txtjack1.innerHTML = `Khả năng trúng jackpot1 là ~ <b>${j1.toFixed(7)}%</b>`;
 
-    getSuggest655(total, length);
+    getSuggest655(level, length);
 }
 
-function getSuggest655(total, length) {
-    var defaultProbability = ((combinations(length, 3)*combinations(55 - length,3))/combinations(55,6))*100;
-
+function getSuggest655(level, length) {
     var suggest = document.getElementById("vietlot_655_suggest");
-    var times = total/defaultProbability;
 
-    if(times < 3.5) {
-        suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Thấp</b>, kiến nghị không dùng.`
-    } else if (times > 7.5) {
+    if (level == 3) {
         suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Cao</b>, nên cân nhắc.`
-    } else {
+    } else if (level == 2) {
         suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Trung Bình</b>, có thể cân nhắc.`
+    } else {
+        suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Thấp</b>, kiến nghị không dùng.`
     }
 }
 
