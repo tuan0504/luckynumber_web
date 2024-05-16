@@ -63,7 +63,7 @@ function closeDialog() {
     dialog.style.display = "none";
 }
 
-// Function to validate the checkbox
+// Function to submit number to Server
 function submitNumber() {
     var processing_655 = document.getElementById("processing_655");
     var txtInput = document.getElementById("numbers_vietlot655");
@@ -95,14 +95,17 @@ function submitNumber() {
 function validateNumbers() {
     var checkbox = document.getElementById("cb_policy_655");
     var txtInput = document.getElementById("numbers_vietlot655");
+    var button = document.getElementById("vietlot655_picknumber");
+
+    const count = countwords(txtInput.value);
     
     if(!checkbox.checked) {
        alert("Bạn vẫn chưa đồng ý điều khoản sử dụng");
        checkbox.focus();
        return false; 
-    } else if (txtInput.value.length < MIN || txtInput.value.length > 3*MAX) {
-        alert(`Xin hãy chọn lại bộ số. Bộ số cần nằm trong khoảng từ ${MIN} - ${MAX} số.`);
-        txtInput.focus();
+    } else if (count < MIN || count > MAX) {
+        alert(`Bộ số không khớp với yêu cầu của hệ thống. Vui lòng sử dụng chức năng "Chọn bộ số" để đảm bảo chính xác.`);
+        button.focus();
         return false;
     }
 
@@ -111,13 +114,13 @@ function validateNumbers() {
 
 function displayResult(data) {
     var result = document.getElementById("vietlot_655_result");
+    var txtInput = document.getElementById("numbers_vietlot655");
     result.style.visibility = "visible";
 
     console.log(data);
 
-    var length = selectedNumbers.length;
+    const length = countwords(txtInput.value);
     var totalProbability = 28989675;
-
 
     var first = data.prize1;
     var second = data.prize2;
@@ -173,9 +176,9 @@ function getSuggest655(total, length) {
     var suggest = document.getElementById("vietlot_655_suggest");
     var times = total/defaultProbability;
 
-    if(times < 3) {
+    if(times < 3.5) {
         suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Thấp</b>, kiến nghị không dùng.`
-    } else if (times > 7) {
+    } else if (times > 7.5) {
         suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Cao</b>, nên cân nhắc.`
     } else {
         suggest.innerHTML = `Khả năng trúng của bộ số này là <b>Trung Bình</b>, có thể cân nhắc.`
@@ -191,4 +194,26 @@ function combinations(n, r)
   } else  {
     return combinations(n,r-1)*((n-r+1)/r);
   }
+}
+
+function countwords(input) {
+    if (input.length === 0) return 0; // Returns 0 if the input is empty
+
+    try {
+        const numberSet = new Set();
+        var numbers = input.trim().split(" ").map(Number);
+        
+        //validate numbers
+        for(var i=0; i < numbers.length; i++) {
+            var item = numbers[i];
+            if(item < 1 || item > 55 || numberSet.has(item)) {
+                return 0;
+            }
+            numberSet.add(item);
+        }
+        return numbers.length; // Returns the number of elements in the array 
+    } catch(error) {
+        console.log(error);
+        return 0;
+    }
 }

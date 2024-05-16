@@ -73,7 +73,7 @@
   font-size: 90px;
   font-style: normal;
   text-align: center;
-  font-family: Cormorant Infant;
+  font-family: inherit;
   font-weight: 700;
   line-height: 90px;
 }
@@ -82,7 +82,7 @@
   font-size: 18px;
   max-width: 600px;
   text-align: center;
-  font-family: Karla;
+  font-family: inherit;
   line-height: 27px;
 }
 .home-hint {
@@ -90,7 +90,7 @@
   font-size: 11px;
   max-width: 600px;
   text-align: center;
-  font-family: Karla;
+  font-family: inherit;
   line-height: 27px;
 }
 .home-border {
@@ -162,10 +162,7 @@
   border-color: rgba(255, 255, 255, 0.3);
   border-width: 4px;
   border-radius: 12px;
-
   padding-top: var(--dl-space-space-halfunit);
-  padding-left: var(--dl-space-space-oneandhalfunits);
-  padding-right: var(--dl-space-space-halfunit);
   padding-bottom: var(--dl-space-space-halfunit);
   margin-bottom: 24px;
 }
@@ -181,7 +178,7 @@
 .home-donate-info p{
   width: 100%;
   text-align: right;
-  font-size: 18px;
+  font-size: 16px;
   line-height: 36px;
 }
 
@@ -189,13 +186,14 @@
   width: 100%;
   padding: 0px;
   margin-top: var(--dl-space-space-halfunit);
-  font-family: Karla;
+  font-family: inherit;
   border-color: #949AA5;
   border-width: 0px;
   border-radius: 0px;
   margin-bottom: var(--dl-space-space-halfunit);
   border-right-width: 1px;
 }
+
 .home-search {
   cursor: pointer;
   display: flex;
@@ -217,6 +215,24 @@
 .home-container2 {
   display: contents;
 }
+
+/* Submit button */
+.button-opendialog {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.button-opendialog:focus,
+.button-opendialog:hover {
+  background-color: #0056b3;
+}
+
 @media(max-width: 767px) {
   .home-main {
     padding-left: var(--dl-space-space-oneandhalfunits);
@@ -237,4 +253,21 @@
     max-width: 80%;
     line-height: 24px;
   }
+}
+
+
+.home-find {
+  font-style: normal;
+  transition: 0.3s;
+  font-weight: 500;
+  padding-top: var(--dl-space-space-unit);
+  border-width: 0px;
+  padding-left: var(--dl-space-space-oneandhalfunits);
+  border-radius: 56px;
+  padding-right: var(--dl-space-space-oneandhalfunits);
+  padding-bottom: var(--dl-space-space-unit);
+  background-color: rgb(250, 216, 122);
+}
+.home-find:hover {
+  opacity: 0.5;
 }
