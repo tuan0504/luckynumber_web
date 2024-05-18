@@ -266,9 +266,9 @@ function validateSuggestion() {
     return true;
 }
 
-function setCookie(name, value, exdays) {
+function setCookie(name, value) {
     const d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    d.setHours(23,59,59)
     let expires = "expires="+ d.toUTCString();
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
