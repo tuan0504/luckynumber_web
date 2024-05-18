@@ -11,7 +11,7 @@ var maxSuggest = 10;
 // Function to get suggest Numbers from Server 
 function fetchSuggestNumbers() {
     //validate 
-    if(suggestTimes > maxSuggest) {
+    if(!validateSuggestion()) {
         alert("Bạn đã nhận tối đa số lần gợi ý hôm nay");
         return;
     }
@@ -253,4 +253,38 @@ function countwords(input) {
         console.log(error);
         return 0;
     }
+}
+
+function validateSuggestion() {
+    if(getCookie("runOutSuggest") == "true") {
+        return false;
+    } else if (suggestTimes > maxSuggest) {
+        setCookie("runOutSuggest" , true, 1);
+        return false;
+    }
+
+    return true;
+}
+
+function setCookie(name, value, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+        c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+        return c.substring(name.length, c.length);
+        }
+    }
+    return "";
 }
