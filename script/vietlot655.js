@@ -5,6 +5,42 @@ var submitButton;
 
 var MIN = 6;
 var MAX = 9;
+var suggestTimes = 0
+var maxSuggest = 10;
+
+// Function to get suggest Numbers from Server 
+function fetchSuggestNumbers() {
+    //validate 
+    if(suggestTimes > maxSuggest) {
+        alert("Bạn đã nhận tối đa số lần gợi ý hôm nay");
+        return;
+    }
+
+    //processing
+    var processing_655 = document.getElementById("processing_655");
+    var txtInput = document.getElementById("numbers_vietlot655");
+    var result = document.getElementById("vietlot_655_result");
+
+    result.style.visibility = "hidden";
+    processing_655.style.display = "block"
+    
+    var fetchURl = "https://2wqgbuiqxca7rdig3xgo4juw2a0qdobs.lambda-url.ap-southeast-1.on.aws"
+    console.log(fetchURl)
+    fetch(fetchURl)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            suggestTimes++;
+            txtInput.value = data.numbers;
+            txtInput.focus();
+        })
+        .catch(error => {
+            alert(error)
+        })
+        .finally(
+            processing_655.style.display = "none"
+        )
+}
 
 // Function to toggle number selection
 function toggleNumber(cell) {

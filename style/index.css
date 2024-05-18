@@ -104,6 +104,15 @@
   flex-direction: column;
   justify-content: center;
 }
+.home-action {
+  gap: 24px;
+  width: 100%;
+  display: flex;
+  max-width: 700px;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
+}
 .home-filter {
   gap: var(--dl-space-space-unit);
   width: 100%;
