@@ -1,45 +1,43 @@
 var selectedNumbers = [];
 var clickEvents = [];
 var dialog;
-var submitButton;
 
 var MIN = 6;
 var MAX = 9;
-var suggestTimes = 0
-var maxSuggest = 10;
+var suggestResults = [];
+var maxSuggest = 5;
 
 // Function to get suggest Numbers from Server 
 function fetchSuggestNumbers() {
     //validate 
     if(!validateSuggestion()) {
-        alert("Bạn đã nhận tối đa số lần gợi ý hôm nay");
         return;
+    } else {
+        //processing
+        var processing_655 = document.getElementById("processing_655");
+        var txtInput = document.getElementById("numbers_vietlot655");
+        var result = document.getElementById("vietlot_655_result");
+
+        result.style.visibility = "hidden";
+        processing_655.style.display = "block"
+        
+        var fetchURl = "https://2wqgbuiqxca7rdig3xgo4juw2a0qdobs.lambda-url.ap-southeast-1.on.aws"
+        console.log(fetchURl)
+        fetch(fetchURl)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                suggestResults.push(data.numbers);
+                txtInput.value = data.numbers;
+                txtInput.focus();
+            })
+            .catch(error => {
+                alert(error)
+            })
+            .finally(
+                processing_655.style.display = "none"
+            )
     }
-
-    //processing
-    var processing_655 = document.getElementById("processing_655");
-    var txtInput = document.getElementById("numbers_vietlot655");
-    var result = document.getElementById("vietlot_655_result");
-
-    result.style.visibility = "hidden";
-    processing_655.style.display = "block"
-    
-    var fetchURl = "https://2wqgbuiqxca7rdig3xgo4juw2a0qdobs.lambda-url.ap-southeast-1.on.aws"
-    console.log(fetchURl)
-    fetch(fetchURl)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            suggestTimes++;
-            txtInput.value = data.numbers;
-            txtInput.focus();
-        })
-        .catch(error => {
-            alert(error)
-        })
-        .finally(
-            processing_655.style.display = "none"
-        )
 }
 
 // Function to toggle number selection
@@ -76,10 +74,8 @@ function submitNumbers(txtInput) {
 // Function to open the dialog
 function openDialog() {
     dialog = document.getElementById("picknumber");
-    submitButton = document.getElementById("submit655");
     dialog.style.display = "block";
     selectedNumbers.length = 0;
-
 
     var tds = document.querySelectorAll('#pick655 td');
     tds.forEach(function(td, index) {
@@ -222,69 +218,35 @@ function getSuggest655(level, length) {
     }
 }
 
-function combinations(n, r) 
-{
-  if( n < r || r < 0 ) {
-      return 0;
-  } else if (n == r || r == 0) {
-    return 1;
-  } else  {
-    return combinations(n,r-1)*((n-r+1)/r);
-  }
-}
-
-function countwords(input) {
-    if (input.length === 0) return 0; // Returns 0 if the input is empty
-
-    try {
-        const numberSet = new Set();
-        var numbers = input.trim().split(" ").map(Number);
-        
-        //validate numbers
-        for(var i=0; i < numbers.length; i++) {
-            var item = numbers[i];
-            if(item < 1 || item > 55 || numberSet.has(item)) {
-                return 0;
-            }
-            numberSet.add(item);
-        }
-        return numbers.length; // Returns the number of elements in the array 
-    } catch(error) {
-        console.log(error);
-        return 0;
-    }
-}
-
 function validateSuggestion() {
-    if(getCookie("runOutSuggest") == "true") {
+    var txtInput = document.getElementById("numbers_vietlot655");
+    var suggestions = getCookie("suggestions");
+
+    if(suggestions.length > 20) {
+        var suggest = pickRandom(suggestions, 9);
+        console.log(suggestions);
+        txtInput.value = suggest;
+        txtInput.focus();        
         return false;
-    } else if (suggestTimes > maxSuggest) {
-        setCookie("runOutSuggest" , true, 1);
+    } else if (suggestResults.length >= maxSuggest) {
+        var setSuggests = new Set();
+        suggestResults.forEach(function(suggestItem) {
+            var numbers = getNumbers(suggestItem);
+            numbers.forEach(function(item) {
+                if(!setSuggests.has(item)) {
+                    setSuggests.add(item);
+                }
+            })
+        })
+        var suggestions = Array.from(setSuggests).join(" ");
+        console.log(suggestions);
+
+        var suggest = pickRandom(suggestions, 9);
+        txtInput.value = suggest;
+        txtInput.focus();        
+        setCookie("suggestions" , suggestions, 1);
         return false;
     }
 
     return true;
-}
-
-function setCookie(name, value) {
-    const d = new Date();
-    d.setHours(23,59,59)
-    let expires = "expires="+ d.toUTCString();
-    document.cookie = name + "=" + value + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-        }
-    }
-    return "";
 }
