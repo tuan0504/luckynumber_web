@@ -222,8 +222,8 @@ function validateSuggestion() {
     var txtInput = document.getElementById("numbers_vietlot655");
     var suggestions = getCookie("suggestions");
 
-    if(suggestions.length > 20) {
-        var suggest = pickRandom(suggestions, 9);
+    if(suggestions.length > 16) {
+        var suggest = pickRandom(suggestions, 7);
         console.log(suggestions);
         txtInput.value = suggest;
         txtInput.focus();        
@@ -241,7 +241,7 @@ function validateSuggestion() {
         var suggestions = Array.from(setSuggests).join(" ");
         console.log(suggestions);
 
-        var suggest = pickRandom(suggestions, 9);
+        var suggest = pickRandom(suggestions, 7);
         txtInput.value = suggest;
         txtInput.focus();        
         setCookie("suggestions" , suggestions, 1);
