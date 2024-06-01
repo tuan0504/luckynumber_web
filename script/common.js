@@ -82,3 +82,7 @@ function pickRandom(contents, size) {
     }
     return Array.from(result).sort(function(a,b) { return a - b;}).join(" ");
 }
+
+function filterMinMax(numbers, min , max) {
+  return numbers.filter(number => number >= min && number <= max).join(" ");
+}

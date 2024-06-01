@@ -7,37 +7,107 @@ var MAX = 9;
 var suggestResults = [];
 var maxSuggest = 5;
 
-// Function to get suggest Numbers from Server 
-function fetchSuggestNumbers() {
-    //validate 
-    if(!validateSuggestion()) {
-        return;
-    } else {
-        //processing
-        var processing_655 = document.getElementById("processing_655");
-        var txtInput = document.getElementById("numbers_vietlot655");
-        var result = document.getElementById("vietlot_655_result");
+const config655 = {};
 
-        result.style.visibility = "hidden";
-        processing_655.style.display = "block"
-        
+function fetchRemoteConfigs655() {
+    if(isFetchRemoteConfig655(config655)) {
+        displayProcessing(true);
+
         var fetchURl = "https://2wqgbuiqxca7rdig3xgo4juw2a0qdobs.lambda-url.ap-southeast-1.on.aws"
-        console.log(fetchURl)
         fetch(fetchURl)
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                suggestResults.push(data.numbers);
-                txtInput.value = data.numbers;
-                txtInput.focus();
+                if(data.session != undefined && data.session.length > 0)
+                    config655.session = data.session;
+                if(data.jackpot != undefined && data.jackpot.length > 0)
+                    config655.jackpot = data.jackpot;
+                if(data.prize1 != undefined && data.prize1.length > 0)
+                    config655.prize1 = data.prize1;
+                if(data.randomsize != undefined && data.randomsize.length > 0)
+                    config655.randomsize = data.randomsize;
+                
+                processConfigs655(config655)
+                setCookie("remoteConfig655", JSON.stringify(config655));
             })
-            .catch(error => {
-                alert(error)
-            })
-            .finally(
-                processing_655.style.display = "none"
-            )
+            .catch(error => { console.log(error) })
+            .finally(displayProcessing(false))
+    } else {
+        processConfigs655(config655);
     }
+}
+
+function isFetchRemoteConfig655(config655) {
+    resetConfigs655(config655);
+    var cookieConfig655 = getCookie("remoteConfig655");
+    try {
+        if(cookieConfig655 != undefined) {
+            var localConfig = JSON.parse(cookieConfig655);
+            if(localConfig.length > 3 && localConfig.jackpot.length > 10 
+                && localConfig.prize1 > 10 && localConfig.session > 0) {
+                config655.session = localConfig.session;
+                config655.jackpot = localConfig.jackpot;
+                config655.prize1 = localConfig.prize1;
+                config655.randomsize = localConfig.randomsize;
+                return false
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    return true;
+}
+function resetConfigs655(config655) {
+    config655.session = "kế tiếp";
+    config655.jackpot = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55";
+    config655.prize1 = "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55";
+    config655.randomsize = 7;
+}
+
+
+function processConfigs655(config655) {
+    var txtSession = document.getElementById("vietlot_655_suggest_title");
+    txtSession.innerHTML = `Gợi ý số dễ trúng ở kỳ quay <b>${config655.session}</b>.`;
+
+    var txtJackpot = document.getElementById("vietlot_655_suggest_jackpot");
+    var txtJack0 = document.getElementById("vietlot_655_suggest_jackpot_0");
+    var txtJack1 = document.getElementById("vietlot_655_suggest_jackpot_1");
+    var txtJack2 = document.getElementById("vietlot_655_suggest_jackpot_2");
+    var txtJack3 = document.getElementById("vietlot_655_suggest_jackpot_3");
+    var txtJack4 = document.getElementById("vietlot_655_suggest_jackpot_4");
+    var txtJack5 = document.getElementById("vietlot_655_suggest_jackpot_5");
+
+    
+    var numbersJ = getNumbers(config655.jackpot);
+    var countJ = numbersJ.length;
+    txtJackpot.innerHTML = `Bộ số Jackpot 2 có <b>${countJ}</b> số :`;
+
+    txtJack0.innerHTML = `${filterMinMax(numbersJ,1,9)}`;
+    txtJack1.innerHTML = `${filterMinMax(numbersJ,10,19)}`;
+    txtJack2.innerHTML = `${filterMinMax(numbersJ,20,29)}`;
+    txtJack3.innerHTML = `${filterMinMax(numbersJ,30,39)}`;
+    txtJack4.innerHTML = `${filterMinMax(numbersJ,40,49)}`;
+    txtJack5.innerHTML = `${filterMinMax(numbersJ,50,55)}`;
+
+
+    var txtprize1 = document.getElementById("vietlot_655_suggest_prize1");
+    var txtprize10 = document.getElementById("vietlot_655_suggest_prize1_0");
+    var txtprize11 = document.getElementById("vietlot_655_suggest_prize1_1");
+    var txtprize12 = document.getElementById("vietlot_655_suggest_prize1_2");
+    var txtprize13 = document.getElementById("vietlot_655_suggest_prize1_3");
+    var txtprize14 = document.getElementById("vietlot_655_suggest_prize1_4");
+    var txtprize15 = document.getElementById("vietlot_655_suggest_prize1_5");
+
+    var numbersP1 = getNumbers(config655.prize1);
+    var countP1 = numbersP1.length;
+    txtprize1.innerHTML = `Bộ số Giải nhất có <b>${countP1}</b> số :`;
+
+    txtprize10.innerHTML = `${filterMinMax(numbersP1,1,9)}`;
+    txtprize11.innerHTML = `${filterMinMax(numbersP1,10,19)}`;
+    txtprize12.innerHTML = `${filterMinMax(numbersP1,20,29)}`;
+    txtprize13.innerHTML = `${filterMinMax(numbersP1,30,39)}`;
+    txtprize14.innerHTML = `${filterMinMax(numbersP1,40,49)}`;
+    txtprize15.innerHTML = `${filterMinMax(numbersP1,50,55)}`;
 }
 
 // Function to toggle number selection
@@ -97,28 +167,27 @@ function closeDialog() {
 
 // Function to submit number to Server
 function submitNumber() {
-    var processing_655 = document.getElementById("processing_655");
     var txtInput = document.getElementById("numbers_vietlot655");
     var result = document.getElementById("vietlot_655_result");
     
     // Check if the checkbox is checked
     if (validateNumbers()) {
         //reset
-        result.style.visibility = "hidden";
-        processing_655.style.display = "block"
+        result.style.display = "none";
+        displayProcessing(true);
 
         var fetchURl = "https://2wqgbuiqxca7rdig3xgo4juw2a0qdobs.lambda-url.ap-southeast-1.on.aws/?token=" + txtInput.value
         console.log(fetchURl)
         fetch(fetchURl)
             .then(response => response.json())
             .then(data => {
-                displayResult(data);
+                displayResultCheck655(data);
             })
             .catch(error => {
                 alert(error)
             })
             .finally(
-                processing_655.style.display = "none"
+                displayProcessing(false)
             )
     }
 }
@@ -144,10 +213,10 @@ function validateNumbers() {
     return true;
 }
 
-function displayResult(data) {
+function displayResultCheck655(data) {
     var result = document.getElementById("vietlot_655_result");
     var txtInput = document.getElementById("numbers_vietlot655");
-    result.style.visibility = "visible";
+    result.style.display = "flex";
 
     console.log(data);
 
@@ -218,35 +287,23 @@ function getSuggest655(level, length) {
     }
 }
 
-function validateSuggestion() {
+function suggestJackpot655() {
     var txtInput = document.getElementById("numbers_vietlot655");
-    var suggestions = getCookie("suggestions");
-
-    if(suggestions.length > 16) {
-        var suggest = pickRandom(suggestions, 7);
-        console.log(suggestions);
-        txtInput.value = suggest;
-        txtInput.focus();        
-        return false;
-    } else if (suggestResults.length >= maxSuggest) {
-        var setSuggests = new Set();
-        suggestResults.forEach(function(suggestItem) {
-            var numbers = getNumbers(suggestItem);
-            numbers.forEach(function(item) {
-                if(!setSuggests.has(item)) {
-                    setSuggests.add(item);
-                }
-            })
-        })
-        var suggestions = Array.from(setSuggests).join(" ");
-        console.log(suggestions);
-
-        var suggest = pickRandom(suggestions, 7);
-        txtInput.value = suggest;
-        txtInput.focus();        
-        setCookie("suggestions" , suggestions, 1);
-        return false;
+    var randomNumbers = "";
+    if(countwords(config655.jackpot) < 40) {
+        randomNumbers = pickRandom(config655.jackpot, config655.randomsize)
+    } else {
+        randomNumbers = pickRandom(config655.prize1, 7)
     }
+    txtInput.value = randomNumbers;
+    txtInput.focus();        
+}
 
-    return true;
+function displayProcessing(isDisplay) {
+    var processing_655 = document.getElementById("processing_655");
+    if(isDisplay) {
+        processing_655.style.display = "block"
+    } else {
+        processing_655.style.display = "none"
+    }
 }
